@@ -1,0 +1,20 @@
+#!/bin/sh
+# Ruff gate on formae code (vendor/ and spike/ are not checked).
+#
+# Activated by setup.sh via: git config core.hooksPath .githooks
+set -eu
+
+cd "$(git rev-parse --show-toplevel)"
+
+# Only run when formae code is staged.
+git diff --cached --name-only --diff-filter=ACMR \
+    | grep -q '^src/formae/.*\.py$' || exit 0
+
+if command -v ruff >/dev/null; then
+    RUFF=ruff
+else
+    RUFF="uvx ruff"
+fi
+
+$RUFF format --check src/formae
+$RUFF check src/formae

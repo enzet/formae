@@ -21,6 +21,9 @@ WXT_SHA=$(awk '/^wiktextract/{print $2}' vendor.lock)
 DUMP=$(awk '/^enwiktionary-dump/{print $2}' vendor.lock)
 DUMP_SHA1=$(awk '/^enwiktionary-dump/{sub("sha1:", "", $3); print $3}' vendor.lock)
 
+echo "Git hooks (.githooks)."
+git config core.hooksPath .githooks
+
 echo "Virtual environment (.venv)."
 [ -d .venv ] || uv venv
 

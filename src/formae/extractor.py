@@ -376,9 +376,7 @@ def normalize_slot_values(values: str | list | dict) -> list:
             normalized.extend(normalize_slot_values(values[key]))
         for key in sorted(k for k in values if not k.isdigit()):
             normalized.extend(
-                {"form": form, "tags": [key]}
-                if isinstance(form, str)
-                else form
+                {"form": form, "tags": [key]} if isinstance(form, str) else form
                 for form in normalize_slot_values(values[key])
             )
         return normalized

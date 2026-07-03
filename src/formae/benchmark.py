@@ -43,9 +43,7 @@ def scan_pages(database_path: str) -> dict[str, list[str]]:
     for title, body in cursor:
         scanned += 1
         if scanned % 2_000_000 == 0:
-            print(
-                f"  scanned {scanned / 1e6:.0f}M pages...", file=sys.stderr
-            )
+            print(f"  scanned {scanned / 1e6:.0f}M pages...", file=sys.stderr)
         if "{{" not in body:
             continue
         for language, pattern in patterns.items():
@@ -61,9 +59,7 @@ def main() -> int:
     parser.add_argument("--database", "--db", required=True)
     parser.add_argument("--sample", type=int, default=400)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument(
-        "--failures", default="data/benchmark_failures.jsonl"
-    )
+    parser.add_argument("--failures", default="data/benchmark_failures.jsonl")
     parsed_arguments: argparse.Namespace = parser.parse_args()
 
     start_time: float = time.time()
@@ -71,8 +67,7 @@ def main() -> int:
     print(
         f"scan done in {time.time() - start_time:.0f}s: "
         + ", ".join(
-            f"{language}={len(titles)}"
-            for language, titles in pages.items()
+            f"{language}={len(titles)}" for language, titles in pages.items()
         ),
         file=sys.stderr,
     )
@@ -99,9 +94,7 @@ def main() -> int:
                 continue
             for template, arguments in calls:
                 try:
-                    result = extractor.extract_call(
-                        title, template, arguments
-                    )
+                    result = extractor.extract_call(title, template, arguments)
                     statistics[language][result.tier] += 1
                     if result.tier == "none":
                         failures.write(

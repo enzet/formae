@@ -37,7 +37,9 @@ from collections.abc import Callable
 
 MODULE_NAMESPACE = 828
 
-RETURN_ANCHOR = re.compile(r"^(\s*)return .*make_table\((\w+)[,)]", re.MULTILINE)
+RETURN_ANCHOR = re.compile(
+    r"^(\s*)return .*make_table\((\w+)[,)]", re.MULTILINE
+)
 
 
 def _patch_before_render(
@@ -62,7 +64,7 @@ def _patch_before_render(
     match = matches[0]
     indentation = match.group(1)
     guard = (
-        f'{indentation}-- formae shim: return forms as data.\n'
+        f"{indentation}-- formae shim: return forms as data.\n"
         f'{indentation}if args["json"] then\n'
         f'{indentation}\treturn require("Module:JSON").toJSON('
         f"{serialize_expression})\n"

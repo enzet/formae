@@ -1,0 +1,2 @@
+# Applies to formae code only (src/); vendor/ clones are never checked.
+line-length = 80
