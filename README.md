@@ -20,7 +20,7 @@ This project stands on **two upstream repositories** by Tatu Ylönen, cloned
 into `vendor/` and installed as editable packages. They are pinned to exact
 verified commits in [vendor.lock](vendor.lock) — not to release tags, because
 upstream tags/PyPI releases lag far behind live Wiktionary, whose module
-ecosystem the code must match (the dump, the upstream commits, and our shims
+ecosystem the code must match (the dump, the upstream commits, and shims
 must stay contemporaneous):
 
 - **[tatuylonen/wikitextprocessor](https://github.com/tatuylonen/wikitextprocessor)** —
@@ -62,34 +62,20 @@ as-is; most of the rest need only a small shim per module family.
 Requires [uv](https://docs.astral.sh/uv/) (any recent version).
 
 ```sh
-uv venv   # Creates .venv/.
-
-# Clone the upstreams at the verified commits pinned in `vendor.lock`:
-WTP_SHA=$(awk '/^wikitextprocessor/{print $2}' vendor.lock)
-WXT_SHA=$(awk '/^wiktextract/{print $2}' vendor.lock)
-git clone https://github.com/tatuylonen/wikitextprocessor.git vendor/wikitextprocessor
-git -C vendor/wikitextprocessor checkout "$WTP_SHA"
-git -C vendor/wikitextprocessor submodule update --init   # Scribunto libs — required for #invoke.
-git clone https://github.com/tatuylonen/wiktextract.git vendor/wiktextract
-git -C vendor/wiktextract checkout "$WXT_SHA"
-
-uv pip install -e vendor/wikitextprocessor
-uv pip install levenshtein nltk pydantic
-uv pip install --no-deps -e vendor/wiktextract
-
-# Fetch the enwiktionary dump snapshot pinned in vendor.lock (a dated dump,
-# never the "latest" symlink — that one silently moves under you) and verify:
-DUMP=$(awk '/^enwiktionary-dump/{print $2}' vendor.lock)
-DUMP_SHA1=$(awk '/^enwiktionary-dump/{sub("sha1:", "", $3); print $3}' vendor.lock)
-curl -o "data/enwiktionary-$DUMP-pages-articles.xml.bz2" \
-  "https://dumps.wikimedia.org/enwiktionary/$DUMP/enwiktionary-$DUMP-pages-articles.xml.bz2"
-echo "$DUMP_SHA1  data/enwiktionary-$DUMP-pages-articles.xml.bz2" | shasum -a 1 -c -
+./setup.sh
 ```
+
+The script is idempotent and driven entirely by the pins in
+[vendor.lock](vendor.lock): it creates `.venv`, clones/syncs the upstreams at
+their pinned commits (including the Scribunto submodule), installs everything,
+and downloads and checksum-verifies the pinned enwiktionary dump snapshot
+(~1.6 GB). Re-run it after a pin bump to sync `vendor/` and `data/`.
 
 Note: dumps.wikimedia.org retains only the last few dated runs. If the pinned
 snapshot has aged out there, fetch it from a
 [mirror](https://dumps.wikimedia.org/mirrors.html) or
-[archive.org](https://archive.org/details/wikimediadownloads).
+[archive.org](https://archive.org/details/wikimediadownloads) and re-run the
+script.
 
 ## License
 
