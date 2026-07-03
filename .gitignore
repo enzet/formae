@@ -1,0 +1,7 @@
+*.pyc
+.venv/
+__pycache__/
+data/
+development.md
+spike/
+vendor/

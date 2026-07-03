@@ -1,0 +1,21 @@
+# Commands:
+#   uv pip install -e vendor/wikitextprocessor
+#   uv pip install --no-deps -e vendor/wiktextract
+#
+# `vendor/wikitextprocessor` needs `git submodule update --init`.
+
+# `wikitextprocessor` runtime dependencies (plain PyPI lupa wheel is correct on
+# master):
+lupa==2.8
+dateparser>=1.3.0
+lxml
+mediawiki_langcodes
+psutil
+requests
+
+# `wiktextract` dependencies (installed manually because we use --no-deps to
+# keep pip from re-fetching `wikitextprocessor` from Git over our editable
+# install):
+levenshtein
+nltk
+pydantic

@@ -1,0 +1,13 @@
+# Pinned versions of the vendored upstream repositories and the dump.
+#
+# Upgrade procedure:
+#   1. pull new dump,
+#   2. pull upstream masters,
+#   3. rebuild wikt.db,
+#   4. run `python -m formae.benchmark --database data/wikt.db --sample 400
+#      --seed 42` and require parity with the recorded baseline before updating
+#      the pins below.
+
+enwiktionary-dump 20260601 sha1:1b337ab6e7f435d9fc5ce5737de913a3a78670bc
+wikitextprocessor 7f4db1656827e5ad166e674929b408d006d81df5
+wiktextract 3a98e1b50fca0dddf73d94e5bb7efa26040f0e21
